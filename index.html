@@ -4,450 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة المريض الذكية - بيكادز</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        medical: '#0ea5e9',
-                        nutrition: '#f97316',
-                        danger: '#ef4444',
-                        success: '#22c55e',
-                        warning: '#eab308'
-                    },
-                    fontFamily: {
-                        sans: ['Tajawal', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        :root {
-            --base-font-size: 14px;
-            --primary-blue: #0ea5e9;
-            --secondary-orange: #f97316;
-            --accent-green: #22c55e;
-            --danger-red: #ef4444;
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.4);
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --base-font-size: 13px;
-            }
-            .text-sm-custom {
-                font-size: 12px;
-            }
-            .glass-panel {
-                padding: 0.75rem !important;
-            }
-            .container {
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
-            }
-            h2 {
-                font-size: 1.1rem !important;
-            }
-            .btn-sm {
-                padding: 0.4rem 0.8rem !important;
-                font-size: 0.75rem !important;
-            }
-        }
-
-        @media (max-width: 380px) {
-            :root {
-                --base-font-size: 12px;
-            }
-            .text-sm-custom {
-                font-size: 11px;
-            }
-            .glass-panel {
-                padding: 0.5rem !important;
-            }
-            h2 {
-                font-size: 1rem !important;
-            }
-            .btn-sm {
-                padding: 0.3rem 0.6rem !important;
-                font-size: 0.7rem !important;
-            }
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            font-size: var(--base-font-size);
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            color: #1e293b;
-            transition: background 0.3s ease, color 0.3s ease;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
-        }
-
-        /* Glassmorphism */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-            border-radius: 1rem;
-        }
-
-        .dark .glass-panel {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        /* Breathing Effect for Buttons */
-        .breathe-btn {
-            transition: all 0.3s ease;
-        }
-        .breathe-btn:hover {
-            animation: breathe 2s infinite ease-in-out;
-            background-color: #0284c7;
-        }
-        @keyframes breathe {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.6); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(14, 165, 233, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
-        }
-
-        /* News Ticker - Left to Right */
-        .ticker-container {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-        }
-        .ticker-text {
-            display: inline-block;
-            animation: ticker 35s linear infinite;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* Custom Scrollbar */
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .modal.active { display: flex; }
-        .modal-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-        }
-        .modal-content {
-            position: relative;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            border: 1px solid rgba(0,0,0,0.1);
-            animation: modalIn 0.3s ease-out;
-        }
-        .dark .modal-content { background: #1e293b; color: white; border-color: rgba(255,255,255,0.1); }
-        @keyframes modalIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* Story Container - FB Style */
-        .story-item {
-            flex-shrink: 0;
-            width: 110px;
-            height: 180px;
-            border-radius: 1rem;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            border: 2px solid var(--primary-blue);
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .story-item:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); border-color: white; }
-        .story-img { width: 100%; height: 100%; object-fit: cover; }
-        .story-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            padding: 1.5rem 0.5rem 0.5rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            font-size: 11px;
-            line-height: 1.2;
-            text-align: right;
-        }
-        .story-profile {
-            position: absolute;
-            top: 8px; right: 8px;
-            width: 35px;
-            height: 35px;
-            border: 2px solid var(--primary-blue);
-            border-radius: 50%;
-            background: white;
-            z-index: 2;
-            padding: 2px;
-        }
-
-        /* Progress Bar Styles */
-        #medProgressBar { transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-        /* Dashboard Mini Widget */
-        .stat-card {
-            padding: 0.75rem;
-            border-radius: 1rem;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            text-align: center;
-        }
-
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 200;
-            display: none;
-            animation: toastIn 0.3s ease-out;
-        }
-        @keyframes toastIn { from { bottom: 60px; opacity: 0; } to { bottom: 80px; opacity: 1; } }
-
-        /* Health Indicator Emoji */
-        .health-status {
-            font-size: 3rem;
-            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* Video Player Modals */
-        #videoPlayerModal video { width: 100%; border-radius: 1rem; }
-
-        /* Night/Day Indicators */
-        .time-icon { opacity: 0.7; font-size: 1.1rem; }
-        .row-warning { background-color: rgba(239, 68, 68, 0.05) !important; border-right: 4px solid var(--danger-red); }
-        .row-success { background-color: rgba(34, 197, 94, 0.05) !important; border-right: 4px solid var(--accent-green); }
-
-        /* Sugar Toggle */
-        .toggle-switch {
-            display: flex;
-            background: #f1f5f9;
-            border-radius: 2rem;
-            padding: 4px;
-            width: fit-content;
-            margin: 0 auto;
-            border: 1px solid #e2e8f0;
-        }
-        .toggle-btn {
-            padding: 0.5rem 1.5rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .toggle-active { background: var(--primary-blue); color: white; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3); transform: scale(1.05); }
-        .dark .toggle-switch { background: #334155; border-color: #475569; }
-
-        /* Achievement Micro-interaction */
-        @keyframes celebrate { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .celebrate { animation: celebrate 0.5s ease; }
-
-        /* Range Slider Customization (Updated) */
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
-            background: #ffffff; cursor: pointer; margin-top: -9px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid var(--primary-blue);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 8px; cursor: pointer; background: #e2e8f0; border-radius: 4px;
-        }
-        .dark input[type=range]::-webkit-slider-runnable-track { background: #475569; }
-
-        /* Pulse */
-        .pulse-dot { animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-
-        .floating-sos { position: fixed; bottom: 20px; right: 20px; z-index: 50; }
-        .emergency-popup {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; color: #1e293b; padding: 1.5rem; border-radius: 1.5rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3); z-index: 110; max-width: 320px;
-            text-align: center; border: 3px solid var(--danger-red); display: none;
-        }
-        .dark .emergency-popup { background: #1e293b; color: #f8fafc; border-color: #f87171; }
-        .emergency-popup.show { display: block; }
-        .popup-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 105; display: none;
-        }
-        /* Quiz Bottom Container */
-        .quiz-bottom-panel {
-            position: fixed;
-            bottom: -100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top-left-radius: 2rem;
-            border-top-right-radius: 2rem;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-            z-index: 150;
-            padding: 2rem;
-            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .dark .quiz-bottom-panel { background: #1e293b; color: white; border-top: 1px solid rgba(255,255,255,0.1); }
-        .quiz-active { bottom: 0 !important; }
-
-        .luxury-text {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-orange));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
+    <link rel="stylesheet" href="css/output.css">
 </head>
-<body class="antialiased pb-20">
+<body class="picads-body">
 
     <!-- نافذة الطوارئ المنبثقة -->
     <div class="popup-overlay" id="popupOverlay" onclick="closeEmergencyPopup()"></div>
     <div class="emergency-popup" id="emergencyPopup">
-        <i class="fa-solid fa-truck-medical text-danger text-4xl mb-3"></i>
-        <h3 class="text-xl font-bold text-danger mb-2">إرشادات هبوط السكر</h3>
-        <ul class="text-right space-y-2 text-sm">
+        <i class="fa-solid fa-triangle-exclamation emergency-icon"></i>
+        <h3 class="emergency-title">إرشادات هبوط السكر</h3>
+        <ul class="emergency-list">
             <li>• تناول نصف كوب عصير محلى أو 3 تمرات فوراً.</li>
             <li>• انتظر 15 دقيقة وافحص السكر مجدداً.</li>
             <li>• إذا لم يتحسن اتصل بالطوارئ.</li>
         </ul>
-        <button onclick="closeEmergencyPopup()" class="mt-4 bg-danger text-white px-4 py-2 rounded-lg w-full hover:bg-red-600 transition">حسناً</button>
+        <button onclick="closeEmergencyPopup()" class="btn-danger-full">حسناً</button>
     </div>
 
-    <header class="glass-panel sticky top-0 z-40 m-2 p-3 lg:m-4 lg:p-4 rounded-b-2xl">
-        <div class="flex justify-between items-center mb-2">
-            <div class="flex items-center gap-2">
-                <!-- تم استبدال الأيقونة بالشعار -->
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-bold text-lg shadow-md overflow-hidden">
-                    <img src="img/logo.png" alt="بيكادز" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/0ea5e9/ffffff?text=PKZ'">
+    <header class="header-main">
+        <div class="header-top">
+            <div class="header-brand">
+                <div class="logo-container">
+                    <img src="img/logo.png" alt="بيكادز" class="logo-img" onerror="this.src='https://placehold.co/100x100/0ea5e9/ffffff?text=PKZ'">
                 </div>
                 <div>
-                    <h1 class="font-bold text-md lg:text-lg text-medical">نظام بيكادز</h1>
-                    <p class="text-sm-custom text-gray-500 dark:text-gray-300">بوابة المريض الذكية</p>
+                    <h1 class="brand-title">نظام بيكادز</h1>
+                    <p class="brand-subtitle">بوابة المريض الذكية</p>
                 </div>
             </div>
-            
-            <div class="flex items-center gap-2">
-                <!-- حالة العيادة -->
-                <div class="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full text-sm-custom border border-green-200 dark:border-green-800 flex items-center gap-1">
-                    <span class="w-2.5 h-2.5 bg-green-500 rounded-full pulse-dot"></span>
-                    <span class="hidden sm:inline">العيادة تعمل حالياً</span>
-                    <span class="sm:hidden">نشط</span>
+
+            <div class="header-actions">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span class="status-text-desktop">العيادة تعمل حالياً</span>
+                    <span class="status-text-mobile">نشط</span>
                 </div>
-                <!-- زر تغيير الوضع (تم نقله إلى هنا) -->
-                <button onclick="toggleTheme()" class="glass-panel w-9 h-9 rounded-full flex items-center justify-center text-sm text-gray-700 dark:text-gray-200 hover:scale-110 transition-transform border-0">
-                    <i class="fa-solid fa-moon dark:hidden"></i>
-                    <i class="fa-solid fa-sun hidden dark:block text-warning"></i>
+                <button onclick="toggleTheme()" class="theme-toggle-btn">
+                    <i class="fa-solid fa-moon icon-moon"></i>
+                    <i class="fa-solid fa-sun icon-sun"></i>
                 </button>
             </div>
         </div>
 
-        <!-- الشريط الإخباري (اتجاه اليسار إلى اليمين) -->
-        <div class="bg-blue-50 dark:bg-slate-800 rounded-lg p-2 mt-3 ticker-container text-sm-custom text-medical border border-blue-100 dark:border-slate-700">
+        <div class="news-ticker">
             <div class="ticker-text" dir="ltr">
-                <i class="fa-solid fa-bullhorn mx-2"></i> أهلاً بكم في بوابة بيكادز الذكية... 
-                <i class="fa-solid fa-user-doctor mx-2 text-nutrition"></i> انضمام د. أحمد أخصائي التغذية لطاقم المركز... 
-                <i class="fa-solid fa-clock mx-2 text-medical"></i> إجازة رسمية يوم الخميس القادم بمناسبة الأعياد الوطنية...
+                <i class="fa-solid fa-bullhorn ticker-icon"></i> أهلاً بكم في بوابة بيكادز الذكية...
+                <i class="fa-solid fa-user-doctor ticker-icon ticker-icon-nutrition"></i> انضمام د. أحمد أخصائي التغذية لطاقم المركز...
+                <i class="fa-solid fa-clock ticker-icon ticker-icon-medical"></i> إجازة رسمية يوم الخميس القادم بمناسبة الأعياد الوطنية...
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-2 lg:px-4 max-w-lg lg:max-w-4xl space-y-4">
-        
+    <main class="main-container">
+
         <!-- ========== ويدجت ترويجي للحجز الذكي ========== -->
-        <section class="glass-panel p-6 text-center transform hover:scale-[1.02] transition-transform duration-300">
-            <div class="flex justify-center mb-4">
-                <div class="relative">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-medical to-nutrition rounded-full blur opacity-30 animate-pulse"></div>
-                    <div class="relative bg-white dark:bg-slate-800 p-4 rounded-full shadow-xl">
-                        <i class="fa-solid fa-calendar-check text-4xl text-medical"></i>
+        <section class="promo-card">
+            <div class="promo-icon-container">
+                <div class="promo-icon-inner">
+                    <div class="promo-glow"></div>
+                    <div class="promo-icon-wrapper">
+                        <i class="fa-solid fa-calendar-check promo-icon"></i>
                     </div>
                 </div>
             </div>
-            <h2 class="text-2xl font-black text-medical mb-3">احجز موعدك بلمسة ذكية</h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                استمتع بخدمة الحجز الإلكتروني السريعة مع دعم كامل للمحافظ الإلكترونية 
-                <span class="font-bold text-nutrition">(جوالي، جيب، ام فلوس، موبايل موني، فلوسك)</span>. 
+            <h2 class="promo-title">احجز موعدك بلمسة ذكية</h2>
+            <p class="promo-description">
+                استمتع بخدمة الحجز الإلكتروني السريعة مع دعم كامل للمحافظ الإلكترونية
+                <span class="promo-highlight">(جوالي، جيب، ام فلوس، موبايل موني، فلوسك)</span>.
                 سرعة، دقة، وخصوصية تامة في إدارة مواعيدك الصحية.
             </p>
-            <div class="flex flex-wrap justify-center gap-3 mb-6">
-                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 dark:border-blue-800">تأكيد فوري</span>
-                <span class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-3 py-1 rounded-full text-xs font-bold border border-orange-200 dark:border-orange-800">دفع إلكتروني</span>
-                <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1 rounded-full text-xs font-bold border border-green-200 dark:border-green-800">تذكير بالمواعيد</span>
+            <div class="promo-badge-container">
+                <span class="badge-blue">تأكيد فوري</span>
+                <span class="badge-orange">دفع إلكتروني</span>
+                <span class="badge-green">تذكير بالمواعيد</span>
             </div>
-            <button onclick="toggleModal('bookingModal')" class="bg-medical text-white font-bold py-4 px-8 rounded-2xl breathe-btn shadow-lg shadow-blue-500/30 text-lg flex items-center gap-3 mx-auto">
+            <button onclick="toggleModal('bookingModal')" class="btn-primary-large">
                 <i class="fa-solid fa-bolt"></i>
                 افتح نافذة الحجز الآن
             </button>
         </section>
 
         <!-- ========== مدرسة السكري التفاعلية ========== -->
-        <section class="glass-panel p-4">
-            <h2 class="text-lg font-bold text-nutrition mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">
-                <i class="fa-solid fa-graduation-cap ml-1"></i> مدرسة السكري التفاعلية
+        <section class="school-section">
+            <h2 class="section-title-nutrition">
+                <i class="fa-solid fa-graduation-cap title-icon"></i> مدرسة السكري التفاعلية
             </h2>
-            
-            <div class="mb-6">
-                <h3 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">نصائح د. أنس الشومي المصورة</h3>
-                <div class="flex gap-4 overflow-x-auto hide-scroll pb-4 px-1">
+
+            <div class="video-stories-container">
+                <h3 class="sub-section-title">نصائح د. أنس الشومي المصورة</h3>
+                <div class="stories-list">
                     <!-- قصة 1 -->
                     <div class="story-item" onclick="playVideo('videos/1.mp4', 'نصائح لتنظيم السكر صباحاً')">
                         <img src="https://placehold.co/200x400/0ea5e9/ffffff?text=Video+1" class="story-img">
                         <div class="story-profile">
-                            <img src="https://placehold.co/100x100/0ea5e9/ffffff?text=Dr" class="rounded-full w-full h-full object-cover">
+                            <img src="https://placehold.co/100x100/0ea5e9/ffffff?text=Dr" class="story-profile-img">
                         </div>
                         <div class="story-overlay">تنظيم السكر صباحاً</div>
                     </div>
@@ -455,7 +108,7 @@
                     <div class="story-item" onclick="playVideo('videos/2.mp4', 'أهمية الرياضة لمرضى السكري')">
                         <img src="https://placehold.co/200x400/f97316/ffffff?text=Video+2" class="story-img">
                         <div class="story-profile">
-                            <img src="https://placehold.co/100x100/f97316/ffffff?text=Sp" class="rounded-full w-full h-full object-cover">
+                            <img src="https://placehold.co/100x100/f97316/ffffff?text=Sp" class="story-profile-img">
                         </div>
                         <div class="story-overlay">أهمية الرياضة</div>
                     </div>
@@ -463,7 +116,7 @@
                     <div class="story-item" onclick="playVideo('videos/3.mp4', 'وصفة صحية لوجبة خفيفة')">
                         <img src="https://placehold.co/200x400/22c55e/ffffff?text=Video+3" class="story-img">
                         <div class="story-profile">
-                            <img src="https://placehold.co/100x100/22c55e/ffffff?text=Fd" class="rounded-full w-full h-full object-cover">
+                            <img src="https://placehold.co/100x100/22c55e/ffffff?text=Fd" class="story-profile-img">
                         </div>
                         <div class="story-overlay">وصفات ذكية</div>
                     </div>
@@ -471,270 +124,265 @@
                     <div class="story-item" onclick="playVideo('videos/4.mp4', 'قياس السكر بشكل صحيح')">
                         <img src="https://placehold.co/200x400/eab308/ffffff?text=Video+4" class="story-img">
                         <div class="story-profile">
-                            <img src="https://placehold.co/100x100/eab308/ffffff?text=Qm" class="rounded-full w-full h-full object-cover">
+                            <img src="https://placehold.co/100x100/eab308/ffffff?text=Qm" class="story-profile-img">
                         </div>
                         <div class="story-overlay">طرق القياس</div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 text-sm-custom">
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center cursor-pointer hover:border-nutrition transition group" onclick="startQuiz()">
-                    <div class="w-14 h-14 mx-auto bg-green-100 dark:bg-green-900/40 text-success rounded-full flex items-center justify-center mb-3 text-2xl relative group-hover:scale-110 transition-transform">
+            <div class="card-grid-2">
+                <div class="interactive-card" onclick="startQuiz()">
+                    <div class="card-icon-green">
                         <i class="fa-solid fa-clipboard-question"></i>
-                        <span class="absolute -top-1 -right-1 bg-warning text-white text-[9px] px-2 py-0.5 rounded-full font-bold shadow-sm">+نقاط</span>
+                        <span class="badge-points">+نقاط</span>
                     </div>
-                    <h3 class="font-bold mb-1">اختبر معلوماتك</h3>
-                    <p class="text-[10px] text-gray-500 italic">اربح نقاط صحة فورية</p>
+                    <h3 class="card-title-bold">اختبر معلوماتك</h3>
+                    <p class="card-description">اربح نقاط صحة فورية</p>
                 </div>
 
-                <a href="library.html" class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center cursor-pointer hover:border-nutrition transition group">
-                    <div class="w-14 h-14 mx-auto bg-purple-100 dark:bg-purple-900/40 text-purple-500 rounded-full flex items-center justify-center mb-3 text-2xl group-hover:scale-110 transition-transform">
+                <a href="library.html" class="interactive-card">
+                    <div class="card-icon-purple">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
-                    <h3 class="font-bold mb-1">المكتبة الشاملة</h3>
-                    <p class="text-[10px] text-gray-500 italic">وصفات وتمارين متجددة</p>
+                    <h3 class="card-title-bold">المكتبة الشاملة</h3>
+                    <p class="card-description">وصفات وتمارين متجددة</p>
                 </a>
             </div>
         </section>
-        </section>
 
         <!-- ========== متتبع الأدوية والمواعيد الذكي ========== -->
-        <section class="glass-panel p-5">
-            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold text-medical">
-                    <i class="fa-solid fa-pills ml-1"></i> متتبع الأدوية والإنجاز
+        <section class="tracker-section">
+            <div class="tracker-header">
+                <h2 class="section-title-medical">
+                    <i class="fa-solid fa-pills title-icon"></i> متتبع الأدوية والإنجاز
                 </h2>
                 <div id="healthEmoji" class="health-status">😊</div>
             </div>
 
-            <!-- لوحة قياس الأداء المصغرة -->
-            <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="stat-card-grid">
                 <div class="stat-card">
-                    <p class="text-[10px] text-gray-500">الالتزام</p>
-                    <p class="font-bold text-success text-sm" id="complianceVal">90%</p>
+                    <p class="stat-label">الالتزام</p>
+                    <p class="stat-value-success" id="complianceVal">90%</p>
                 </div>
                 <div class="stat-card">
-                    <p class="text-[10px] text-gray-500">المتبقي</p>
-                    <p class="font-bold text-medical text-sm" id="remainingVal">12 يوم</p>
+                    <p class="stat-label">المتبقي</p>
+                    <p class="stat-value-medical" id="remainingVal">12 يوم</p>
                 </div>
                 <div class="stat-card">
-                    <p class="text-[10px] text-gray-500">النقاط</p>
-                    <p class="font-bold text-warning text-sm">+450</p>
+                    <p class="stat-label">النقاط</p>
+                    <p class="stat-value-warning">+450</p>
                 </div>
             </div>
 
-            <div class="mb-5">
-                <div class="flex justify-between text-sm-custom mb-2">
-                    <span class="text-gray-600 dark:text-gray-300 font-medium">إنجاز الخطة العلاجية لليوم:</span>
-                    <span class="font-black text-success" id="medProgressText">33%</span>
+            <div class="progress-wrapper">
+                <div class="progress-info">
+                    <span class="progress-label">إنجاز الخطة العلاجية لليوم:</span>
+                    <span class="progress-value" id="medProgressText">33%</span>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-inner">
-                    <div class="bg-gradient-to-r from-success to-medical h-full rounded-full transition-all duration-700 shadow-lg" id="medProgressBar" style="width: 33%"></div>
+                <div class="progress-container">
+                    <div class="progress-bar-success" id="medProgressBar" style="width: 33%"></div>
                 </div>
             </div>
 
-            <div class="space-y-3 mb-5" id="medScheduleTable">
+            <div class="medicine-list" id="medScheduleTable">
                 <!-- صف دواء تجريبي 1 -->
-                <div class="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-all hover:shadow-md">
-                    <label class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-gray-300 transition-all checked:border-success checked:bg-success med-checkbox" checked onchange="handleMedCheck(this)">
-                        <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                            <i class="fa-solid fa-check text-xs"></i>
+                <div class="medicine-item">
+                    <label class="medicine-checkbox-container">
+                        <input type="checkbox" class="checkbox-custom med-checkbox" checked onchange="handleMedCheck(this)">
+                        <span class="checkbox-checkmark">
+                            <i class="fa-solid fa-check check-icon"></i>
                         </span>
                     </label>
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2">
-                            <p class="font-bold text-sm">ميتفورمين (Metformin)</p>
-                            <span class="text-[9px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 px-1.5 py-0.5 rounded">850mg</span>
+                    <div class="medicine-info">
+                        <div class="medicine-header">
+                            <p class="med-name">ميتفورمين (Metformin)</p>
+                            <span class="pill-blue">850mg</span>
                         </div>
-                        <div class="flex items-center gap-3 mt-1">
-                            <p class="text-[10px] text-gray-500"><i class="fa-solid fa-clock-rotate-left ml-0.5"></i> بعد الإفطار</p>
-                            <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                                <div class="bg-success h-full" style="width: 80%"></div>
+                        <div class="medicine-meta">
+                            <p class="med-time"><i class="fa-solid fa-clock-rotate-left"></i> بعد الإفطار</p>
+                            <div class="medicine-progress-bg">
+                                <div class="medicine-progress-fill" style="width: 80%"></div>
                             </div>
-                            <span class="text-[9px] text-gray-400">80% متبقي</span>
+                            <span class="med-progress-text">80% متبقي</span>
                         </div>
                     </div>
-                    <i class="fa-solid fa-sun text-warning time-icon"></i>
+                    <i class="fa-solid fa-sun time-icon time-icon-day"></i>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <button onclick="toggleModal('medicineModal')" class="bg-medical/10 text-medical border border-medical/20 font-bold py-3 rounded-xl hover:bg-medical hover:text-white transition-all flex items-center justify-center gap-2">
+            <div class="action-grid">
+                <button onclick="toggleModal('medicineModal')" class="btn-secondary-outline">
                     <i class="fa-solid fa-plus-circle"></i>
                     إدخال بيانات الدواء
                 </button>
-                <button onclick="openCamera()" class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 font-bold py-3 rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
+                <button onclick="openCamera()" class="btn-gray-light">
                     <i class="fa-solid fa-camera"></i>
                     تصوير الوصفة
                 </button>
             </div>
 
-            <div class="relative group">
-                <input type="text" placeholder="أدخل رقم الملف الطبي..." onfocus="showToast('هذه الخاصية قيد التطوير حالياً')" class="w-full p-3 pr-10 text-sm-custom rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical focus:outline-none transition-shadow">
-                <i class="fa-solid fa-id-card absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-medical"></i>
+            <div class="id-input-wrapper">
+                <input type="text" placeholder="أدخل رقم الملف الطبي..." onfocus="showToast('هذه الخاصية قيد التطوير حالياً')" class="input-primary">
+                <i class="fa-solid fa-id-card input-icon-right"></i>
             </div>
         </section>
 
         <!-- ========== حاسبة السكر التفاعلية ========== -->
-        <section class="glass-panel p-5 text-center">
-            <h2 class="text-xl font-black text-medical mb-4 border-b pb-3 border-gray-100 dark:border-gray-800 text-right luxury-text">
-                <i class="fa-solid fa-droplet text-danger ml-2 animate-pulse"></i> حاسبة السكر الذكية
+        <section class="calculator-section">
+            <h2 class="calculator-header">
+                <i class="fa-solid fa-calculator title-icon"></i> حاسبة السكر الذكية
             </h2>
-            
-            <!-- زر التوقل (صائم / غير صائم) -->
-            <div class="toggle-switch mb-6">
+
+            <div class="toggle-switch">
                 <div id="fastingBtn" class="toggle-btn toggle-active" onclick="setSugarType('fasting')">صائم</div>
                 <div id="nonFastingBtn" class="toggle-btn" onclick="setSugarType('non-fasting')">غير صائم</div>
             </div>
 
-            <div class="mb-4">
-                <p class="text-sm-custom text-gray-500 mb-4">مرر الشريط أو أدخل القيمة يدوياً (mg/dL)</p>
-                <div class="flex items-center gap-4 max-w-xs mx-auto mb-6">
-                    <div class="flex-1 relative pt-1">
-                        <input type="range" min="40" max="400" value="100" class="w-full" id="sugarSlider" oninput="calculateSugar('slider')">
+            <div class="calculator-controls">
+                <p class="calc-helper">مرر الشريط أو أدخل القيمة يدوياً (mg/dL)</p>
+                <div class="calculator-input-row">
+                    <div class="calculator-slider-container">
+                        <input type="range" min="40" max="400" value="100" class="calc-slider" id="sugarSlider" oninput="calculateSugar('slider')">
                     </div>
-                    <input type="number" id="sugarInput" value="100" min="40" max="400" oninput="calculateSugar('input')" class="w-20 p-2 text-center font-bold text-medical bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-medical">
+                    <input type="number" id="sugarInput" value="100" min="40" max="400" oninput="calculateSugar('input')" class="calc-input">
                 </div>
-                
-                <div class="text-center mb-6">
-                    <span id="sugarValueDisplay" class="text-5xl font-black text-success transition-all duration-500 drop-shadow-md">100</span>
-                    <span class="text-gray-400 text-xs font-bold mr-1">mg/dL</span>
+
+                <div class="calculator-display-container">
+                    <span id="sugarValueDisplay" class="sugar-display text-success">100</span>
+                    <span class="calc-unit">mg/dL</span>
                 </div>
             </div>
 
-            <div id="sugarResultBox" class="p-4 rounded-2xl bg-success/5 border border-success/20 transition-all duration-500">
-                <p id="sugarMessage" class="font-bold text-success text-sm leading-relaxed">مستوى طبيعي وممتاز! استمر في المحافظة على نظامك الصحي.</p>
+            <div id="sugarResultBox" class="result-box result-box-success">
+                <p id="sugarMessage" class="calc-msg text-success">مستوى طبيعي وممتاز! استمر في المحافظة على نظامك الصحي.</p>
             </div>
 
-            <div id="notifyDoctorBtn" class="hidden mt-4 animate-bounce">
-                <button onclick="showToast('تم إرسال تنبيه عاجل للفريق الطبي')" class="bg-danger text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-500/30 hover:bg-red-600 transition-all w-full md:w-auto">
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i> إشعار الطبيب فوراً
+            <div id="notifyDoctorBtn" class="hidden-btn">
+                <button onclick="showToast('تم إرسال تنبيه عاجل للفريق الطبي')" class="btn-danger-large">
+                    <i class="fa-solid fa-triangle-exclamation"></i> إشعار الطبيب فوراً
                 </button>
             </div>
         </section>
 
         <!-- ========== استشارة سريعة بيكادز ========== -->
-        <section class="glass-panel p-5">
-            <h2 class="text-lg font-bold text-medical mb-2 border-b pb-3 border-gray-100 dark:border-gray-700">
-                <i class="fa-regular fa-comments ml-1"></i> استشارة سريعة
+        <section class="consult-section">
+            <h2 class="section-title-medical">
+                <i class="fa-regular fa-comments title-icon"></i> استشارة سريعة
             </h2>
-            <p class="text-[11px] text-gray-500 mb-4 mt-[-8px] italic">خاص بالمرضى المسجلين لدى بيكادز</p>
-            
-            <form id="consultForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="relative">
-                        <input type="text" id="consultFileNum" placeholder="رقم الملف" class="w-full p-3 pr-9 text-sm-custom rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
-                        <i class="fa-solid fa-hashtag absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            <p class="consult-helper">خاص بالمرضى المسجلين لدى بيكادز</p>
+
+            <form id="consultForm" class="consult-form">
+                <div class="consult-grid">
+                    <div class="input-wrapper">
+                        <input type="text" id="consultFileNum" placeholder="رقم الملف" class="input-primary">
+                        <i class="fa-solid fa-hashtag consult-icon"></i>
                     </div>
-                    <div class="relative">
-                        <select id="consultTopic" class="w-full p-3 pr-9 text-sm-custom rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical appearance-none">
+                    <div class="input-wrapper">
+                        <select id="consultTopic" class="select-primary">
                             <option value="">موضوع الاستشارة</option>
                             <option value="تعديل جرعة">تعديل جرعة</option>
                             <option value="استفسار دوائي">استفسار دوائي</option>
                             <option value="عارض صحي">عارض صحي</option>
                             <option value="أخرى">أخرى</option>
                         </select>
-                        <i class="fa-solid fa-list-check absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <i class="fa-solid fa-list-check input-icon-right input-icon-small"></i>
                     </div>
                 </div>
-                <textarea id="consultMsg" rows="3" placeholder="اكتب تفاصيل استشارتك هنا..." class="w-full p-3 text-sm-custom rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical resize-none"></textarea>
-                <button type="button" onclick="sendConsultWhatsApp()" class="w-full bg-gradient-to-r from-medical to-blue-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-blue-500/40 transition-all flex items-center justify-center gap-3">
+                <textarea id="consultMsg" rows="3" placeholder="اكتب تفاصيل استشارتك هنا..." class="textarea-primary"></textarea>
+                <button type="button" onclick="sendConsultWhatsApp()" class="btn-whatsapp">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
                     إرسال عبر واتساب
                 </button>
             </form>
         </section>
 
-    <!-- ========== حوايا منبثقة (Modals) ========== -->
-    
+    </main>
+
     <!-- Modal: الحجز الذكي -->
     <div class="modal" id="bookingModal">
         <div class="modal-overlay" onclick="toggleModal('bookingModal')"></div>
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-6 border-b pb-3 border-gray-100 dark:border-gray-700">
-                <h3 class="text-xl font-bold text-medical">نافذة الحجز الذكي</h3>
-                <button onclick="toggleModal('bookingModal')" class="text-gray-400 hover:text-danger transition"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
+            <div class="modal-header">
+                <h3 class="modal-title">نافذة الحجز الذكي</h3>
+                <button onclick="toggleModal('bookingModal')" class="modal-close-btn-x"><i class="fa-solid fa-circle-xmark"></i></button>
             </div>
-            <form id="bookingForm" class="space-y-5 text-sm-custom">
-                <div class="flex justify-between bg-gray-50 dark:bg-slate-700/50 p-1 rounded-2xl border border-gray-100 dark:border-gray-700">
-                    <button type="button" id="newFileBtn" class="flex-1 py-3 rounded-xl font-bold transition-all bg-medical text-white shadow-md">زيارة أولى</button>
-                    <button type="button" id="existingFileBtn" class="flex-1 py-3 rounded-xl font-bold transition-all text-gray-500">لدينا ملف</button>
+            <form id="bookingForm" class="booking-form">
+                <div class="toggle-container">
+                    <button type="button" id="newFileBtn" class="toggle-option-active">زيارة أولى</button>
+                    <button type="button" id="existingFileBtn" class="toggle-option">لدينا ملف</button>
                 </div>
 
-                <!-- حقول الزيارة الأولى (تظهر تلقائياً) -->
-                <div id="firstVisitFields" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" placeholder="اسم المريض" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
-                        <input type="number" placeholder="عمر المريض" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
+                <div id="firstVisitFields" class="visit-fields">
+                    <div class="grid-2">
+                        <input type="text" placeholder="اسم المريض" class="input-primary">
+                        <input type="number" placeholder="عمر المريض" class="input-primary">
                     </div>
-                    <input type="tel" placeholder="رقم الجوال" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
+                    <input type="tel" placeholder="رقم الجوال" class="input-primary">
                 </div>
 
-                <!-- حقول الملف القديم (مخفية) -->
-                <div id="fileFields" class="grid grid-cols-2 gap-3 hidden">
-                    <input type="text" placeholder="رقم الملف" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
-                    <input type="tel" placeholder="77xxxxxxx" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
+                <div id="fileFields" class="grid-2 hidden-fields">
+                    <input type="text" placeholder="رقم الملف" class="input-primary">
+                    <input type="tel" placeholder="77xxxxxxx" class="input-primary">
                 </div>
 
                 <div>
-                    <label class="block mb-3 font-bold text-gray-700 dark:text-gray-200">نوع الموعد والزيارة:</label>
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="appt_type" value="د. أنس" class="peer hidden" checked>
-                            <div class="p-3 text-center rounded-xl border-2 peer-checked:border-medical peer-checked:bg-medical/5 transition font-bold">د. أنس</div>
+                    <label class="modal-label">نوع الموعد والزيارة:</label>
+                    <div class="radio-grid">
+                        <label class="radio-label">
+                            <input type="radio" name="appt_type" value="د. أنس" class="radio-input" checked>
+                            <div class="radio-card-medical">د. أنس</div>
                         </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="appt_type" value="تغذية" class="peer hidden">
-                            <div class="p-3 text-center rounded-xl border-2 peer-checked:border-nutrition peer-checked:bg-nutrition/5 transition font-bold">تغذية</div>
+                        <label class="radio-label">
+                            <input type="radio" name="appt_type" value="تغذية" class="radio-input">
+                            <div class="radio-card-nutrition">تغذية</div>
                         </label>
                     </div>
-                    <div class="flex justify-between bg-gray-50 dark:bg-slate-700/50 p-1 rounded-2xl">
-                        <button type="button" id="newTypeBtn" class="flex-1 py-2 rounded-xl font-bold transition-all bg-medical text-white">جديد</button>
-                        <button type="button" id="returnTypeBtn" class="flex-1 py-2 rounded-xl font-bold transition-all text-gray-500">عودة</button>
+                    <div class="toggle-small-container">
+                        <button type="button" id="newTypeBtn" class="toggle-option-small-active">جديد</button>
+                        <button type="button" id="returnTypeBtn" class="toggle-option-small">عودة</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="date" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800">
-                    <input type="time" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800">
+                <div class="grid-2">
+                    <input type="date" class="input-primary">
+                    <input type="time" class="input-primary">
                 </div>
 
                 <div>
-                    <label class="block mb-3 font-bold text-gray-700 dark:text-gray-200">اختر محفظة الدفع:</label>
-                    <div class="flex gap-4 overflow-x-auto hide-scroll pb-2">
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('جوالي', '777123456')">
-                            <img src="img/jawali.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">جوالي</p>
+                    <label class="modal-label">اختر محفظة الدفع:</label>
+                    <div class="wallet-selector">
+                        <div class="wallet-card" onclick="selectWallet('جوالي', '777123456')">
+                            <img src="img/jawali.png" class="wallet-icon">
+                            <p class="wallet-label">جوالي</p>
                         </div>
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('جيب', '711123456')">
-                            <img src="img/jeep.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">جيب</p>
+                        <div class="wallet-card" onclick="selectWallet('جيب', '711123456')">
+                            <img src="img/jeep.png" class="wallet-icon">
+                            <p class="wallet-label">جيب</p>
                         </div>
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('ام فلوس', '733123456')">
-                            <img src="img/mfloos.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">ام فلوس</p>
+                        <div class="wallet-card" onclick="selectWallet('ام فلوس', '733123456')">
+                            <img src="img/mfloos.png" class="wallet-icon">
+                            <p class="wallet-label">ام فلوس</p>
                         </div>
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('موبايل موني', '770123456')">
-                            <img src="img/mobilemoney.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">موبايل موني</p>
+                        <div class="wallet-card" onclick="selectWallet('موبايل موني', '770123456')">
+                            <img src="img/mobilemoney.png" class="wallet-icon">
+                            <p class="wallet-label">موبايل موني</p>
                         </div>
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('فلوسك', '700123456')">
-                            <img src="img/floosk.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">فلوسك</p>
+                        <div class="wallet-card" onclick="selectWallet('فلوسك', '700123456')">
+                            <img src="img/floosk.png" class="wallet-icon">
+                            <p class="wallet-label">فلوسك</p>
                         </div>
-                        <div class="wallet-card group bg-white dark:bg-slate-800" onclick="selectWallet('حوالة', 'عبر الصراف')">
-                            <img src="img/transfer.png" class="w-14 h-14 object-contain mx-auto mb-1">
-                            <p class="text-[10px] font-bold">حوالة</p>
+                        <div class="wallet-card" onclick="selectWallet('حوالة', 'عبر الصراف')">
+                            <img src="img/transfer.png" class="wallet-icon">
+                            <p class="wallet-label">حوالة</p>
                         </div>
                     </div>
                     <input type="hidden" id="selectedWallet" value="">
                 </div>
 
-                <input type="text" placeholder="رقم إيصال الدفع" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-medical">
-                
-                <button type="button" onclick="sendBookingViaWhatsApp()" class="w-full bg-medical text-white font-black py-4 rounded-2xl breathe-btn shadow-xl shadow-blue-500/30 text-lg">
+                <input type="text" placeholder="رقم إيصال الدفع" class="input-primary">
+
+                <button type="button" onclick="sendBookingViaWhatsApp()" class="btn-primary-large w-full">
                     تأكيد الحجز المبدئي
                 </button>
             </form>
@@ -745,22 +393,22 @@
     <div class="modal" id="medicineModal">
         <div class="modal-overlay" onclick="toggleModal('medicineModal')"></div>
         <div class="modal-content">
-            <h3 class="text-xl font-bold text-medical mb-6 border-b pb-3">إدخال خطة علاجية جديدة</h3>
-            <form id="medForm" class="space-y-4">
-                <input type="text" id="medName" placeholder="اسم الدواء" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800">
-                <input type="text" id="medDose" placeholder="مقدار الجرعة / العبوة" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800">
+            <h3 class="modal-title-bordered">إدخال خطة علاجية جديدة</h3>
+            <form id="medForm" class="med-form">
+                <input type="text" id="medName" placeholder="اسم الدواء" class="input-primary">
+                <input type="text" id="medDose" placeholder="مقدار الجرعة / العبوة" class="input-primary">
                 <div>
-                    <label class="block mb-2 text-xs text-gray-400">تكرار الجرعة:</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="freq-btn p-2 text-center rounded-lg border text-[10px] cursor-pointer" onclick="setFreq('صباحاً')">صباحاً</div>
-                        <div class="freq-btn p-2 text-center rounded-lg border text-[10px] cursor-pointer" onclick="setFreq('مساءً')">مساءً</div>
-                        <div class="freq-btn p-2 text-center rounded-lg border text-[10px] cursor-pointer" onclick="setFreq('مرتين')">مرتين</div>
-                        <div class="freq-btn p-2 text-center rounded-lg border text-[10px] cursor-pointer" onclick="setFreq('3 مرات')">3 مرات</div>
-                        <div class="freq-btn p-2 text-center rounded-lg border text-[10px] cursor-pointer col-span-2" onclick="setFreq('مخصص')">مخصص</div>
+                    <label class="freq-label">تكرار الجرعة:</label>
+                    <div class="freq-grid">
+                        <div class="freq-btn" onclick="setFreq('صباحاً')">صباحاً</div>
+                        <div class="freq-btn" onclick="setFreq('مساءً')">مساءً</div>
+                        <div class="freq-btn" onclick="setFreq('مرتين')">مرتين</div>
+                        <div class="freq-btn" onclick="setFreq('3 مرات')">3 مرات</div>
+                        <div class="freq-btn freq-btn-wide" onclick="setFreq('مخصص')">مخصص</div>
                     </div>
                     <input type="hidden" id="medFreq" value="">
                 </div>
-                <button type="button" onclick="addMedication()" class="w-full bg-success text-white font-bold py-3 rounded-xl shadow-lg">إدراج في الجدول</button>
+                <button type="button" onclick="addMedication()" class="btn-success-full">إدراج في الجدول</button>
             </form>
         </div>
     </div>
@@ -768,19 +416,19 @@
     <!-- Modal: مشغل الفيديو -->
     <div class="modal" id="videoPlayerModal">
         <div class="modal-overlay" onclick="toggleModal('videoPlayerModal')"></div>
-        <div class="modal-content max-w-2xl bg-black overflow-hidden relative p-0">
-            <button onclick="toggleModal('videoPlayerModal')" class="absolute top-4 right-4 text-white z-10 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-            <div id="videoContainer" class="w-full aspect-video">
-                <video id="mainVideo" controls class="w-full h-full">
+        <div class="video-modal-content">
+            <button onclick="toggleModal('videoPlayerModal')" class="video-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div id="videoContainer" class="video-aspect">
+                <video id="mainVideo" controls class="video-player">
                     <source src="" type="video/mp4">
                 </video>
             </div>
-            <div class="p-4 bg-slate-900 border-t border-slate-800 flex justify-between items-center text-white">
-                <div>
-                    <h4 id="videoTitle" class="font-bold text-sm"></h4>
-                    <p class="text-[10px] text-gray-400">بواسطة د. أنس الشومي</p>
+            <div class="video-footer">
+                <div class="video-info">
+                    <h4 id="videoTitle"></h4>
+                    <p>بواسطة د. أنس الشومي</p>
                 </div>
-                <button onclick="shareLink()" class="bg-blue-600 p-2 rounded-lg text-xs flex items-center gap-2"><i class="fa-solid fa-share-nodes"></i> مشاركة</button>
+                <button onclick="shareLink()" class="btn-share"><i class="fa-solid fa-share-nodes"></i> مشاركة</button>
             </div>
         </div>
     </div>
@@ -788,74 +436,65 @@
     <div id="toast" class="toast"></div>
 
     <!-- Container: حاص بالأسئلة السفلية -->
-    <div id="quizPanel" class="quiz-bottom-panel">
-        <div class="flex justify-between items-center mb-4">
-            <h4 class="font-black text-lg text-medical">اختبر ذكاءك الصحي 🧩</h4>
-            <button onclick="document.getElementById('quizPanel').classList.remove('quiz-active')" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+    <div id="quizPanel" class="quiz-panel">
+        <div class="quiz-header">
+            <h4 class="quiz-title">اختبر ذكاءك الصحي 🧩</h4>
+            <button onclick="document.getElementById('quizPanel').classList.remove('quiz-active')" class="quiz-close"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="quizContent" class="space-y-4">
-            <p class="text-gray-600 dark:text-gray-300 font-bold">سؤال اليوم: ما هي أنسب فاكهة لمريض السكري؟</p>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="handleQuizAnswer(true)" class="p-3 border rounded-xl hover:bg-success hover:text-white transition-all font-bold text-sm">التفاح الأخضر</button>
-                <button onclick="handleQuizAnswer(false)" class="p-3 border rounded-xl hover:bg-danger hover:text-white transition-all font-bold text-sm">العنب الأحمر</button>
+        <div id="quizContent" class="quiz-content">
+            <p class="quiz-question">سؤال اليوم: ما هي أنسب فاكهة لمريض السكري؟</p>
+            <div class="quiz-options">
+                <button onclick="handleQuizAnswer(true)" class="quiz-option-correct">التفاح الأخضر</button>
+                <button onclick="handleQuizAnswer(false)" class="quiz-option-wrong">العنب الأحمر</button>
             </div>
         </div>
     </div>
 
-    <!-- زر الطوارئ العائم (مع نافذة منبثقة) -->
-    <button onclick="showEmergencyPopup()" class="floating-sos bg-danger text-white w-14 h-14 rounded-full shadow-lg shadow-red-500/50 flex items-center justify-center text-2xl hover:scale-110 transition-transform animate-bounce">
+    <!-- زر الطوارئ العائم -->
+    <button onclick="showEmergencyPopup()" class="floating-sos">
         <i class="fa-solid fa-truck-medical"></i>
     </button>
 
     <script>
-        // --- تهيئة عامة ---
         let currentSugarType = 'fasting';
         let currentMedFreq = '';
 
-        // --- وظائف النوافذ المنبثقة (Modals) ---
         function toggleModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.toggle('active');
+            document.getElementById(id).classList.toggle('active');
         }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            toast.classList.add('toast-active');
+            setTimeout(() => { toast.classList.remove('toast-active'); }, 3000);
         }
 
-        // --- وظائف الحجز الذكي ---
         function selectWallet(name, details) {
-            document.querySelectorAll('.wallet-card').forEach(c => c.classList.remove('border-medical', 'bg-medical/5'));
-            event.currentTarget.classList.add('border-medical', 'bg-medical/5');
+            document.querySelectorAll('.wallet-card').forEach(c => c.classList.remove('wallet-card-active'));
+            event.currentTarget.classList.add('wallet-card-active');
             document.getElementById('selectedWallet').value = name;
             showToast(`تم اختيار ${name}: ${details}`);
         }
 
-        // تبديل أزرار الحجز
         document.getElementById('newFileBtn')?.addEventListener('click', function() {
-            this.classList.add('bg-medical', 'text-white', 'shadow-md');
-            this.classList.remove('text-gray-500');
-            document.getElementById('existingFileBtn').classList.remove('bg-medical', 'text-white', 'shadow-md');
-            document.getElementById('existingFileBtn').classList.add('text-gray-500');
-            document.getElementById('firstVisitFields').classList.remove('hidden');
-            document.getElementById('fileFields').classList.add('hidden');
+            this.className = 'toggle-option-active';
+            document.getElementById('existingFileBtn').className = 'toggle-option';
+            document.getElementById('firstVisitFields').classList.remove('hidden-fields');
+            document.getElementById('fileFields').classList.add('hidden-fields');
         });
 
         document.getElementById('existingFileBtn')?.addEventListener('click', function() {
-            this.classList.add('bg-medical', 'text-white', 'shadow-md');
-            this.classList.remove('text-gray-500');
-            document.getElementById('newFileBtn').classList.remove('bg-medical', 'text-white', 'shadow-md');
-            document.getElementById('newFileBtn').classList.add('text-gray-500');
-            document.getElementById('fileFields').classList.remove('hidden');
-            document.getElementById('firstVisitFields').classList.add('hidden');
+            this.className = 'toggle-option-active';
+            document.getElementById('newFileBtn').className = 'toggle-option';
+            document.getElementById('fileFields').classList.remove('hidden-fields');
+            document.getElementById('firstVisitFields').classList.add('hidden-fields');
         });
 
         function sendBookingViaWhatsApp() {
             const form = document.getElementById('bookingForm');
-            const isNew = !document.getElementById('firstVisitFields').classList.contains('hidden');
-            
+            const isNew = !document.getElementById('firstVisitFields').classList.contains('hidden-fields');
+
             let name = "", age = "", phone = "", fileNum = "";
             if (isNew) {
                 name = form.querySelector('input[placeholder="اسم المريض"]').value;
@@ -867,7 +506,7 @@
             }
 
             const apptType = form.querySelector('input[name="appt_type"]:checked')?.value;
-            const visitType = document.getElementById('newTypeBtn').classList.contains('bg-medical') ? 'جديد' : 'عودة';
+            const visitType = document.getElementById('newTypeBtn').classList.contains('toggle-option-small-active') ? 'جديد' : 'عودة';
             const date = form.querySelector('input[type="date"]').value;
             const time = form.querySelector('input[type="time"]').value;
             const wallet = document.getElementById('selectedWallet').value || 'غير محدد';
@@ -895,11 +534,10 @@
             window.open(`https://wa.me/967771234567?text=${text}`, '_blank');
         }
 
-        // --- وظائف متتبع الأدوية ---
         function setFreq(val) {
             currentMedFreq = val;
-            document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('bg-medical', 'text-white'));
-            event.target.classList.add('bg-medical', 'text-white');
+            document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('freq-btn-active'));
+            event.target.classList.add('freq-btn-active');
         }
 
         function addMedication() {
@@ -909,26 +547,28 @@
 
             const table = document.getElementById('medScheduleTable');
             const newRow = document.createElement('div');
-            newRow.className = "flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-all hover:shadow-md row-success";
-            
+            newRow.className = "medicine-item row-success";
+
             const icon = currentMedFreq.includes('مساء') ? 'fa-moon' : 'fa-sun';
-            const iconColor = currentMedFreq.includes('مساء') ? 'text-blue-400' : 'text-warning';
+            const iconClass = currentMedFreq.includes('مساء') ? 'time-icon-night' : 'time-icon-day';
 
             newRow.innerHTML = `
-                <label class="relative flex items-center cursor-pointer">
-                    <input type="checkbox" class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-gray-300 transition-all checked:border-success checked:bg-success med-checkbox" onchange="handleMedCheck(this)">
-                    <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <i class="fa-solid fa-check text-xs"></i>
+                <label class="medicine-checkbox-container">
+                    <input type="checkbox" class="checkbox-custom med-checkbox" onchange="handleMedCheck(this)">
+                    <span class="checkbox-checkmark">
+                        <i class="fa-solid fa-check check-icon"></i>
                     </span>
                 </label>
-                <div class="flex-1">
-                    <div class="flex items-center gap-2">
-                        <p class="font-bold text-sm">${name}</p>
-                        <span class="text-[9px] bg-green-50 dark:bg-green-900/30 text-success px-1.5 py-0.5 rounded">${dose}</span>
+                <div class="medicine-info">
+                    <div class="medicine-header">
+                        <p class="med-name">${name}</p>
+                        <span class="pill-green">${dose}</span>
                     </div>
-                    <p class="text-[10px] text-gray-500 mt-1">${currentMedFreq}</p>
+                    <div class="medicine-meta">
+                        <p class="med-time"><i class="fa-solid fa-clock-rotate-left"></i> ${currentMedFreq}</p>
+                    </div>
                 </div>
-                <i class="fa-solid ${icon} ${iconColor} time-icon"></i>
+                <i class="fa-solid ${icon} time-icon ${iconClass}"></i>
             `;
             table.prepend(newRow);
             toggleModal('medicineModal');
@@ -938,8 +578,8 @@
 
         function handleMedCheck(el) {
             if (el.checked) {
-                el.closest('div.flex').classList.add('celebrate');
-                setTimeout(() => el.closest('div.flex').classList.remove('celebrate'), 500);
+                el.closest('div.medicine-item').classList.add('celebrate');
+                setTimeout(() => el.closest('div.medicine-item').classList.remove('celebrate'), 500);
                 showToast("أحسنت! استمر في الالتزام 🌟");
             }
             updateMedProgress();
@@ -949,11 +589,11 @@
             const total = document.querySelectorAll('.med-checkbox').length;
             const checked = document.querySelectorAll('.med-checkbox:checked').length;
             const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
-            
+
             document.getElementById('medProgressBar').style.width = percent + '%';
             document.getElementById('medProgressText').innerText = percent + '%';
             document.getElementById('complianceVal').innerText = percent + '%';
-            
+
             const emoji = document.getElementById('healthEmoji');
             if (percent < 30) emoji.innerText = '😔';
             else if (percent < 70) emoji.innerText = '😐';
@@ -961,12 +601,8 @@
             else emoji.innerText = '💪';
         }
 
-        function openCamera() {
-            showToast("جاري تشغيل الكاميرا لتحليل الوصفة (AI)...");
-            // محاكاة فتح الكاميرا
-        }
+        function openCamera() { showToast("جاري تشغيل الكاميرا لتحليل الوصفة (AI)..."); }
 
-        // --- وظائف حاسبة السكر ---
         function setSugarType(type) {
             currentSugarType = type;
             document.getElementById('fastingBtn').classList.toggle('toggle-active', type === 'fasting');
@@ -978,7 +614,7 @@
             const slider = document.getElementById('sugarSlider');
             const input = document.getElementById('sugarInput');
             let val = source === 'slider' ? slider.value : input.value;
-            
+
             if (source === 'slider') input.value = val;
             else slider.value = val;
 
@@ -986,10 +622,9 @@
             const box = document.getElementById('sugarResultBox');
             const message = document.getElementById('sugarMessage');
             const notifyBtn = document.getElementById('notifyDoctorBtn');
-            
+
             display.innerText = val;
-            
-            // تهيئة القيم اللونية بناءً على النوع (صائم/غير صائم)
+
             let isDanger = false, isWarning = false;
             if (currentSugarType === 'fasting') {
                 if (val < 70 || val > 130) isDanger = true;
@@ -999,27 +634,24 @@
                 else if (val > 140) isWarning = true;
             }
 
-            display.className = "text-5xl font-black transition-all duration-500 drop-shadow-md " + 
-                               (isDanger ? 'text-danger' : (isWarning ? 'text-warning' : 'text-success'));
-            
-            box.className = `p-4 rounded-2xl border transition-all duration-500 ${isDanger ? 'bg-danger/5 border-danger/20' : (isWarning ? 'bg-warning/5 border-warning/20' : 'bg-success/5 border-success/20')}`;
-            
+            display.className = "sugar-display " + (isDanger ? 'text-danger' : (isWarning ? 'text-warning' : 'text-success'));
+            box.className = `result-box ${isDanger ? 'result-box-danger row-warning' : (isWarning ? 'result-box-warning' : 'result-box-success')}`;
+
             if (isDanger) {
                 message.innerText = val < 70 ? "تنبيه: هبوط حاد! تناول ملعقة عسل أو عصير فوراً." : "تنبيه: ارتفاع ملحوظ! راجع جرعاتك أو تواصل مع الطبيب.";
-                message.className = "font-bold text-danger text-sm";
-                notifyBtn.classList.remove('hidden');
+                message.className = "calc-msg text-danger";
+                notifyBtn.classList.remove('hidden-btn');
             } else if (isWarning) {
                 message.innerText = "القراءة مرتفعة قليلاً. قلل من الكربوهيدرات واشرب الماء.";
-                message.className = "font-bold text-warning text-sm";
-                notifyBtn.classList.add('hidden');
+                message.className = "calc-msg text-warning";
+                notifyBtn.classList.add('hidden-btn');
             } else {
                 message.innerText = "مستوى طبيعي وممتاز! استمر في المحافظة على نظامك الصحي.";
-                message.className = "font-bold text-success text-sm";
-                notifyBtn.classList.add('hidden');
+                message.className = "calc-msg text-success";
+                notifyBtn.classList.add('hidden-btn');
             }
         }
 
-        // --- وظائف المدرسة السكرية والقسم الاستشاري ---
         function playVideo(src, title) {
             const modal = document.getElementById('videoPlayerModal');
             document.getElementById('mainVideo').src = src;
@@ -1030,34 +662,24 @@
 
         function startQuiz() {
             const file = prompt("ادخل رقم ملفك كي تستفيد من النقاط:");
-            if (file) {
-                document.getElementById('quizPanel').classList.add('quiz-active');
-            }
+            if (file) { document.getElementById('quizPanel').classList.add('quiz-active'); }
         }
 
         function handleQuizAnswer(isCorrect) {
-            if (isCorrect) {
-                showToast("إجابة صحيحة! +10 نقاط رصيد 🎁");
-            } else {
-                showToast("حاول مرة أخرى! للمعلومة: الفواكه قليلة السكر أفضل.");
-            }
-            setTimeout(() => {
-                document.getElementById('quizPanel').classList.remove('quiz-active');
-            }, 2000);
+            if (isCorrect) showToast("إجابة صحيحة! +10 نقاط رصيد 🎁");
+            else showToast("حاول مرة أخرى! للمعلومة: الفواكه قليلة السكر أفضل.");
+            setTimeout(() => { document.getElementById('quizPanel').classList.remove('quiz-active'); }, 2000);
         }
 
         function sendConsultWhatsApp() {
             const file = document.getElementById('consultFileNum').value;
             const topic = document.getElementById('consultTopic').value;
             const msg = document.getElementById('consultMsg').value;
-            
             if (!file || !topic || !msg) { showToast("أكمل بيانات الاستشارة"); return; }
-            
             let text = `*استشارة سريعة بيكادز*%0aرقم الملف: ${file}%0aالموضوع: ${topic}%0aالتفاصيل: ${msg}`;
             window.open(`https://wa.me/967771234567?text=${text}`, '_blank');
         }
 
-        // --- الوضع الليلي ---
         function toggleTheme() {
             document.body.classList.toggle('dark');
             localStorage.setItem('picads_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
@@ -1069,7 +691,6 @@
             calculateSugar('slider');
         };
 
-        // وظائف الطوارئ
         function showEmergencyPopup() {
             document.getElementById('emergencyPopup').classList.add('show');
             document.getElementById('popupOverlay').classList.add('show');
@@ -1079,16 +700,13 @@
             document.getElementById('popupOverlay').classList.remove('show');
         }
 
-        // تبديل أزرار نوع الزيارة في المودال
         document.getElementById('newTypeBtn')?.addEventListener('click', function() {
-            this.classList.add('bg-medical', 'text-white');
-            document.getElementById('returnTypeBtn').classList.remove('bg-medical', 'text-white');
-            document.getElementById('returnTypeBtn').classList.add('text-gray-500');
+            this.className = 'toggle-option-small-active';
+            document.getElementById('returnTypeBtn').className = 'toggle-option-small';
         });
         document.getElementById('returnTypeBtn')?.addEventListener('click', function() {
-            this.classList.add('bg-medical', 'text-white');
-            document.getElementById('newTypeBtn').classList.remove('bg-medical', 'text-white');
-            document.getElementById('newTypeBtn').classList.add('text-gray-500');
+            this.className = 'toggle-option-small-active';
+            document.getElementById('newTypeBtn').className = 'toggle-option-small';
         });
     </script>
 </body>
